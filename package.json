@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "axios": "^0.24.0",
+    "moment": "^2.29.1",
+    "react-bootstrap-range-slider": "^3.0.3"
+  }
+}

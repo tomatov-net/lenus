@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+    node-api:
+        container_name: node-lenus-api
+        build:
+            context: ./backend
+            dockerfile: ../.docker/node-js-api.docker
+        volumes:
+            - ./:/var/www
+        ports:
+            - "8094:8094"
+            - "8093:8093"
+        networks:
+            - inner_network
+    node-spa:
+        container_name: node-lenus-spa
+        build:
+            context: ./frontend
+            dockerfile: ../.docker/node-js-spa.docker
+        volumes:
+            - ./:/var/www
+        ports:
+            - "3000:3000"
+        networks:
+            - inner_network
+    mysql:
+        image: mysql:8
+        container_name: lenus-mysql
+        command: mysqld --user=root
+        ports:
+            - 3332:3306
+        environment:
+            - MYSQL_DATABASE=lenus_db
+            - MYSQL_USER=lenus
+            - MYSQL_PASSWORD=lenus
+            - MYSQL_ROOT_PASSWORD=root
+        healthcheck:
+            test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+            timeout: 5s
+            retries: 10
+        networks:
+            - inner_network
+
+networks:
+    inner_network:
